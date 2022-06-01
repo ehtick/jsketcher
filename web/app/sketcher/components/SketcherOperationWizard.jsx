@@ -7,6 +7,8 @@ import ButtonGroup from "ui/components/controls/ButtonGroup";
 import Button from "ui/components/controls/Button";
 import {useStreamWithUpdater} from "ui/effects";
 import {SketcherAppContext} from "./SketcherAppContext";
+import {TextField} from "../../cad/craft/wizard/components/form/Fields";
+
 
 
 export default function SketcherOperationWizard({}) {
@@ -35,6 +37,8 @@ export default function SketcherOperationWizard({}) {
 
         if (field.type === 'selection') {
           params[field.name] = [];
+        } if (field.type === 'string') {
+          params[field.name] = '';
         }
       }
 
@@ -87,7 +91,7 @@ export default function SketcherOperationWizard({}) {
     data: params,
     activeParam,
     setActiveParam: (activeParam) => setState(state => ({...state, activeParam})),
-    updateParam: (name, val) => setState(state => ({...state, params: {...params, name: val}}))
+    updateParam: (name, val) => setState(state => ({...state, params: {...params, [name]: val}}))
   };
 
 
@@ -100,14 +104,17 @@ export default function SketcherOperationWizard({}) {
 
       <Group>
         {schema.map(field => {
-          return (() => {
+          const fieldLabel = field.title || field.name;
+              return (() => {
 
             if (field.type === 'selection') {
-              return <Entity name={field.name} title={field.title || field.name}
+              return <Entity name={field.name} title={fieldLabel}
                              placeholder={schema.placeholder} key={field.name}
                              onEntityEnter={obj => {viewer.capture('highlight2', [obj], true); viewer.refresh();}}
                              onEntityLeave={obj => {viewer.withdrawAll('highlight2');viewer.refresh();}}
                              entityRenderer={entityRenderer}/>
+                } else if (field.type === 'string') {
+                  return <TextField key={field.name} name={field.name} label={fieldLabel} />
             }
           })();
 

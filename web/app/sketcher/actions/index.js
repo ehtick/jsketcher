@@ -8,11 +8,13 @@ import objectToolActions from "./objectToolActions";
 import commonActions from "./commonActions";
 import exportActions from "./exportActions";
 import generalToolActions from "./generalToolActions";
+import objectActions from "./objectActions";
 
 const ALL_CONTEXTUAL_ACTIONS = [
   ...constraintActions,
   ...operationActions,
-];
+...objectActions,
+  ];
 
 const ACTIONS = [
   ...constraintGlobalActions,
